@@ -37,4 +37,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Configre S3 CORs
-        run: aws s3api put-bucket-cors --bucket $BUCKET_NAME --cors-configuration file://s3-cors-policy.json
+        run: |
+          cd $ENV
+          aws s3api put-bucket-cors --bucket $BUCKET_NAME --cors-configuration file://s3-cors-policy.json
