@@ -12,30 +12,29 @@ jobs:
     environment:
       name: Test
     steps:
+      - name: Setup Environment Variables
+        run: |
+          echo "ENV=test" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=us-gov-west-1" >> $GITHUB_ENV
+          echo "BUCKET_NAME=cg-f61bd1bb-2c11-42bb-beb4-835dcccb6310" >> $GITHUB_ENV
       - name: Sync from S3
         run: |
-          pwd
           mkdir $ENV
           cd $ENV
           aws s3 sync s3://$BUCKET_NAME .
         env:
-          ENV: test
-          AWS_DEFAULT_REGION: us-gov-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_NAME: cg-f61bd1bb-2c11-42bb-beb4-835dcccb6310
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Sync to S3
         run: |
-          pwd
           cd $ENV
           aws s3 sync . s3://$BUCKET_NAME
         env:
-          ENV: test
-          AWS_DEFAULT_REGION: us-gov-west-1
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BUCKET_NAME: cg-f61bd1bb-2c11-42bb-beb4-835dcccb6310
+      - name: Configre S3 CORs
+        run: aws s3api put-bucket-cors --bucket $BUCKET_NAME --cors-configuration file://s3-cors-policy.json
