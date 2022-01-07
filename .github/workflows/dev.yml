@@ -14,10 +14,11 @@ jobs:
     steps:
       - name: Sync from S3
         run: |
-          pwd
           mkdir $ENV
           cd $ENV
           aws s3 sync s3://$BUCKET_NAME .
+          pwd
+          ls
         env:
           ENV: dev
           AWS_DEFAULT_REGION: us-gov-west-1
@@ -30,9 +31,10 @@ jobs:
           fetch-depth: 0
       - name: Sync to S3
         run: |
-          pwd
           cd $ENV
           aws s3 sync . s3://$BUCKET_NAME
+          pwd
+          ls
         env:
           ENV: dev
           AWS_DEFAULT_REGION: us-gov-west-1
