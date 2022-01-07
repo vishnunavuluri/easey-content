@@ -33,3 +33,9 @@ jobs:
           pwd
           cd $ENV
           aws s3 sync . s3://$BUCKET_NAME
+        env:
+          ENV: test
+          AWS_DEFAULT_REGION: us-gov-west-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          BUCKET_NAME: cg-f61bd1bb-2c11-42bb-beb4-835dcccb6310
